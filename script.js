@@ -1,18 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // INITIALIZE ICONS
-    lucide.createIcons();
+    // INITIALIZE ICONS WITH SAFETY
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 
-    // 1. LOADER & INITIALIZATION
-    window.addEventListener('load', () => {
+    // 1. LOADER & INITIALIZATION (With Fail-Safe)
+    let isLoaded = false;
+    function clearLoader() {
+        if (isLoaded) return;
+        isLoaded = true;
         const loader = document.getElementById('loader');
-        setTimeout(() => {
+        if (loader) {
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
                 revealHero();
             }, 800);
-        }, 1500);
+        }
+    }
+
+    // Try normal load
+    window.addEventListener('load', () => {
+        setTimeout(clearLoader, 300);
     });
+
+    // FAIL-SAFE: Force clear after 5 seconds
+    setTimeout(clearLoader, 5000);
 
 
 
