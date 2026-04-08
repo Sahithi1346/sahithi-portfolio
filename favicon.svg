@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    .ts-letters { 
+      font-weight: 800; 
+      font-family: Serif; 
+    }
+    .name-text {
+      font-family: Sans-Serif;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    @media (prefers-color-scheme: dark) {
+      .ts-letters { fill: #ffffff; }
+      .name-text { fill: #c4f135; }
+    }
+    @media (prefers-color-scheme: light) {
+      .ts-letters { fill: #000000; }
+      .name-text { fill: #000000; }
+    }
+  </style>
+  <!-- SEPARATED T and S with a clear "middle space" -->
+  <text x="0" y="70" font-size="80" class="ts-letters">T</text>
+  <text x="60" y="70" font-size="80" class="ts-letters">S</text>
+  
+  <!-- "SAHITHI" perfectly centered in that middle space -->
+  <text x="50" y="48" text-anchor="middle" font-size="12" class="name-text" letter-spacing="1">SAHITHI</text>
+</svg>
