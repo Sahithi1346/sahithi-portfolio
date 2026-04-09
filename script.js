@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     }
 
-    // 1. LOADER & INITIALIZATION (With Fail-Safe)
+    // 1. LOADER & INITIALIZATION
     let isLoaded = false;
     function clearLoader() {
         if (isLoaded) return;
@@ -19,54 +19,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Try normal load
-    window.addEventListener('load', () => {
-        setTimeout(clearLoader, 300);
-    });
+    window.addEventListener('load', () => setTimeout(clearLoader, 300));
+    setTimeout(clearLoader, 5000); // Fail-safe
 
-    // FAIL-SAFE: Force clear after 5 seconds
-    setTimeout(clearLoader, 5000);
-
-
-
-    // 3. REVEAL ANIMATIONS (NO AI TYPING)
+    // 3. REVEAL ANIMATIONS
     function revealHero() {
         gsap.registerPlugin(ScrollTrigger);
-
         const tl = gsap.timeline();
-        tl.from(".main-title", {
-            y: 100,
-            skewY: 10,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power4.out"
-        })
-        .from(".description", {
-            y: 20,
-            opacity: 0,
-            duration: 1,
-            ease: "power2.out"
-        }, "-=1")
-        .from(".photo-frame", {
-            scale: 1.2,
-            opacity: 0,
-            duration: 1.5,
-            ease: "expo.out"
-        }, "-=1");
+        tl.from(".main-title", { y: 100, skewY: 10, opacity: 0, duration: 1.5, ease: "power4.out" })
+          .from(".description", { y: 20, opacity: 0, duration: 1, ease: "power2.out" }, "-=1")
+          .from(".photo-frame", { scale: 1.2, opacity: 0, duration: 1.5, ease: "expo.out" }, "-=1");
     }
 
-    // 4. SCROLL PROGRESS
+    // 4. SCROLL PROGRESS & NAVBAR
     window.addEventListener('scroll', () => {
         const scrollProgress = document.getElementById('scroll-progress');
         const scrollPct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        scrollProgress.style.width = scrollPct + '%';
+        if (scrollProgress) scrollProgress.style.width = scrollPct + '%';
 
-        // Navbar scrolled state
         const navbar = document.getElementById('navbar');
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+        if (navbar) {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
         }
 
         // Active Nav Detection
@@ -80,96 +54,108 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         navLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href').includes(current)) {
-                link.classList.add('active');
-            }
+            if (link.getAttribute('href').includes(current)) link.classList.add('active');
         });
     });
 
-    // 5. SKILL CARDS HOVER EFFECT
+    // 5. SKILL CARDS HOVER
     document.querySelectorAll('.skill-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            gsap.to(card, { y: -10, duration: 0.3, ease: 'power2.out' });
-        });
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, { y: 0, duration: 0.3, ease: 'power2.out' });
-        });
+        card.addEventListener('mouseenter', () => gsap.to(card, { y: -10, duration: 0.3, ease: 'power2.out' }));
+        card.addEventListener('mouseleave', () => gsap.to(card, { y: 0, duration: 0.3, ease: 'power2.out' }));
     });
 
-    // 6. PROJECTS - CARD SLIDER
+    // 6. PROJECTS - 3D CAROUSEL WITH GESTURES
     const carousel = document.getElementById('project-carousel');
     const cards = document.querySelectorAll('.project-card-3d');
+    const carouselWrapper = document.querySelector('.carousel-3d-wrapper');
     let rotationAngle = 0;
     const cardCount = cards.length;
 
     function updateCarousel() {
+        if (!carousel) return;
         cards.forEach((card, i) => {
             const angle = (360 / cardCount) * i + rotationAngle;
-            card.style.transform = `rotateY(${angle}deg) translateZ(400px)`;
-            
+            card.style.transform = `rotateY(${angle}deg) translateZ(450px)`;
             const normalizedAngle = ((angle % 360) + 360) % 360;
-            if (normalizedAngle < 30 || normalizedAngle > 330) {
-                card.style.opacity = '1';
-                card.style.filter = 'blur(0px)';
+            if (normalizedAngle < 25 || normalizedAngle > 335) {
+                card.style.opacity = '1'; card.style.filter = 'blur(0px)'; card.style.zIndex = '10'; card.style.pointerEvents = 'auto';
             } else if (normalizedAngle > 90 && normalizedAngle < 270) {
-                card.style.opacity = '0';
+                card.style.opacity = '0'; card.style.pointerEvents = 'none';
             } else {
-                card.style.opacity = '0.3';
-                card.style.filter = 'blur(5px)';
+                card.style.opacity = '0.2'; card.style.filter = 'blur(4px)'; card.style.zIndex = '1'; card.style.pointerEvents = 'none';
             }
         });
     }
 
-    document.getElementById('next-btn').addEventListener('click', () => {
-        rotationAngle -= (360 / cardCount);
+    let isDragging = false;
+    let startX = 0;
+    const handleDragStart = (x) => { isDragging = true; startX = x; carousel.style.transition = 'none'; };
+    const handleDragMove = (x) => {
+        if (!isDragging) return;
+        rotationAngle += (x - startX) * 0.15;
+        startX = x;
         updateCarousel();
-    });
-
-    document.getElementById('prev-btn').addEventListener('click', () => {
-        rotationAngle += (360 / cardCount);
+    };
+    const handleDragEnd = () => {
+        isDragging = false;
+        const cardAngle = 360 / cardCount;
+        rotationAngle = Math.round(rotationAngle / cardAngle) * cardAngle;
+        carousel.style.transition = 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)';
         updateCarousel();
-    });
+    };
 
-    updateCarousel();
-
-    // 7. THEME TOGGLE - with localStorage persistence
-    const themeBtn = document.getElementById('theme-toggle');
-
-    // Load saved preference
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-        document.body.classList.remove('dark-mode');
+    if (carouselWrapper) {
+        carouselWrapper.addEventListener('mousedown', (e) => handleDragStart(e.clientX));
+        window.addEventListener('mousemove', (e) => handleDragMove(e.clientX));
+        window.addEventListener('mouseup', handleDragEnd);
+        carouselWrapper.addEventListener('touchstart', (e) => handleDragStart(e.touches[0].clientX), { passive: true });
+        carouselWrapper.addEventListener('touchmove', (e) => handleDragMove(e.touches[0].clientX), { passive: true });
+        carouselWrapper.addEventListener('touchend', handleDragEnd);
+        carouselWrapper.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                e.preventDefault();
+                rotationAngle -= e.deltaX * 0.1;
+                updateCarousel();
+                clearTimeout(window.snapTimeout);
+                window.snapTimeout = setTimeout(handleDragEnd, 200);
+            }
+        }, { passive: false });
     }
 
-    themeBtn.addEventListener('click', () => {
+    document.getElementById('next-btn')?.addEventListener('click', () => { rotationAngle -= (360 / cardCount); updateCarousel(); });
+    document.getElementById('prev-btn')?.addEventListener('click', () => { rotationAngle += (360 / cardCount); updateCarousel(); });
+    updateCarousel();
+
+    // 7. THEME TOGGLE
+    const themeBtn = document.getElementById('theme-toggle');
+    if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.body.classList.remove('dark-mode'); }
+    themeBtn?.addEventListener('click', () => {
         const isLight = document.body.classList.toggle('light-mode');
         document.body.classList.toggle('dark-mode', !isLight);
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        // Re-render icons so they adapt to color changes
         lucide.createIcons();
     });
 
-    // 8. HIRE ME MODAL LOGIC
+    // 8. HIRE ME MODAL
     const hireBtn = document.getElementById('hire-me-btn');
     const hireModal = document.getElementById('hire-modal');
     const closeBtn = document.querySelector('.close-modal');
+    hireBtn?.addEventListener('click', () => { hireModal.classList.add('active'); document.body.style.overflow = 'hidden'; lucide.createIcons(); });
+    closeBtn?.addEventListener('click', () => { hireModal.classList.remove('active'); document.body.style.overflow = 'auto'; });
+    window.addEventListener('click', (e) => { if (e.target === hireModal) { hireModal.classList.remove('active'); document.body.style.overflow = 'auto'; } });
 
-    hireBtn.addEventListener('click', () => {
-        hireModal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
-        lucide.createIcons(); // Ensure icons are rendered
-    });
-
-    closeBtn.addEventListener('click', () => {
-        hireModal.classList.remove('active');
-        document.body.style.overflow = 'auto'; // Restore scrolling
-    });
-
-    // Close on click outside
-    window.addEventListener('click', (e) => {
-        if (e.target === hireModal) {
-            hireModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+    // 9. CONTACT FORM SUBMISSION
+    const contactForm = document.getElementById('contact-form');
+    const formSuccess = document.getElementById('form-success');
+    contactForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        submitBtn.innerText = 'Sending...';
+        submitBtn.disabled = true;
+        setTimeout(() => {
+            contactForm.style.display = 'none';
+            formSuccess.style.display = 'block';
+            gsap.from(formSuccess, { opacity: 0, y: 20, duration: 0.5 });
+        }, 1500);
     });
 });
