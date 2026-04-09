@@ -136,13 +136,80 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     });
 
-    // 8. HIRE ME MODAL
+    // 8. HIRE ME & RESUME MODALS
     const hireBtn = document.getElementById('hire-me-btn');
     const hireModal = document.getElementById('hire-modal');
     const closeBtn = document.querySelector('.close-modal');
+    
+    const resumeBtn = document.getElementById('view-resume-btn');
+    const resumeModal = document.getElementById('resume-modal');
+    const closeResume = document.querySelector('.close-resume');
+    const downloadResumeBtn = document.getElementById('download-resume-btn');
+
+    // Handle Hire Me Modal
     hireBtn?.addEventListener('click', () => { hireModal.classList.add('active'); document.body.style.overflow = 'hidden'; lucide.createIcons(); });
     closeBtn?.addEventListener('click', () => { hireModal.classList.remove('active'); document.body.style.overflow = 'auto'; });
-    window.addEventListener('click', (e) => { if (e.target === hireModal) { hireModal.classList.remove('active'); document.body.style.overflow = 'auto'; } });
+
+    // Handle Resume Modal
+    resumeBtn?.addEventListener('click', () => { 
+        resumeModal.classList.add('active'); 
+        hireModal.classList.remove('active'); 
+        document.body.style.overflow = 'hidden'; 
+    });
+    closeResume?.addEventListener('click', () => { resumeModal.classList.remove('active'); document.body.style.overflow = 'auto'; });
+
+    // Handle PDF Download (Generation)
+    downloadResumeBtn?.addEventListener('click', () => {
+        const originalText = downloadResumeBtn.innerText;
+        downloadResumeBtn.innerText = 'Creating PDF...';
+        downloadResumeBtn.disabled = true;
+
+        // Directly use the modal content
+        const element = document.querySelector('#resume-modal .modal-content');
+        if (!element) {
+            alert('Error: Resume content not found.');
+            downloadResumeBtn.innerText = originalText;
+            downloadResumeBtn.disabled = false;
+            return;
+        }
+
+        // Configuration for a clean, professional PDF
+        const opt = {
+            margin:       [0.5, 0.5, 0.5, 0.5],
+            filename:     'Sahithi_Thavishi_Resume.pdf',
+            image:        { type: 'jpeg', quality: 1 },
+            html2canvas:  { 
+                scale: 1.5, // Reduced scale for better performance and stability
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        // Generate the PDF
+        html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+            // Optional: You could do further PDF processing here
+        }).save().then(() => {
+            downloadResumeBtn.innerText = originalText;
+            downloadResumeBtn.disabled = false;
+        }).catch(err => {
+            console.error('PDF Generation Failed:', err);
+            downloadResumeBtn.innerText = 'Retrying...';
+            // Fallback: Simple print if generation fails
+            setTimeout(() => {
+                window.print();
+                downloadResumeBtn.innerText = originalText;
+                downloadResumeBtn.disabled = false;
+            }, 500);
+        });
+    });
+
+    window.addEventListener('click', (e) => { 
+        if (e.target === hireModal) { hireModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+        if (e.target === resumeModal) { resumeModal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+    });
 
     // 9. CONTACT FORM SUBMISSION
     const contactForm = document.getElementById('contact-form');
