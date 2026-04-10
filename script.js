@@ -58,6 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 4.5 MOUSE TRACKING FOR TEXT HIGHLIGHT
+    document.addEventListener('mousemove', (e) => {
+        const highlights = document.querySelectorAll('.highlight');
+        highlights.forEach(highlight => {
+            const rect = highlight.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            highlight.style.setProperty('--mouse-x', `${x}px`);
+            highlight.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
     // 5. SKILL CARDS HOVER
     document.querySelectorAll('.skill-card').forEach(card => {
         card.addEventListener('mouseenter', () => gsap.to(card, { y: -10, duration: 0.3, ease: 'power2.out' }));
