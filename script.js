@@ -136,6 +136,25 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     });
 
+    });
+
+    // MOBILE HAMBURGER LOGIC
+    const hamburger = document.getElementById('hamburger');
+    const navLinksContainer = document.querySelector('.nav-links');
+    const navLinksItems = document.querySelectorAll('.nav-links a');
+
+    hamburger?.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinksContainer.classList.toggle('active');
+    });
+
+    navLinksItems.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinksContainer.classList.remove('active');
+        });
+    });
+
     // 8. HIRE ME & RESUME MODALS
     const hireBtn = document.getElementById('hire-me-btn');
     const hireModal = document.getElementById('hire-modal');
