@@ -753,12 +753,14 @@ body.light-mode .hamburger span { background: #000; }
     .nav-links a { font-size: 1.2rem; }
     .hamburger { display: block !important; }
 
-    .split-layout { grid-template-columns: 1fr; gap: 40px; }
-    .main-title { font-size: 3.5rem; text-align: center; }
-    .description { text-align: center; }
-    .hero-cta { flex-direction: column; align-items: center; width: 100%; }
+    .split-layout { display: flex; flex-direction: column; gap: 30px; }
+    .hero-text, .hero-image-container { display: contents; }
+    
+    .main-title { order: 1; font-size: 3.5rem; text-align: center; margin-bottom: 0; }
+    .photo-frame { order: 2; max-width: 320px; margin: 20px auto; }
+    .description { order: 3; text-align: center; margin-bottom: 30px; }
+    .hero-cta { order: 4; flex-direction: column; align-items: center; width: 100%; }
     .btn { width: 100%; text-align: center; }
-    .photo-frame { max-width: 400px; margin: 40px auto 0; }
     .section-title { font-size: 2.5rem; }
 
     .skills-grid { grid-template-columns: 1fr 1fr; }
