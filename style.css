@@ -724,50 +724,107 @@ body.light-mode .hamburger span { background: #000; }
     gap: 30px;
 }
 
-@media (max-width: 600px) {
-    .input-row {
-        grid-template-columns: 1fr;
-    }
-}
-
+/* ========================
+   RESPONSIVE - TABLET (≤1000px)
+======================== */
 @media (max-width: 1000px) {
     #navbar {
         padding: 20px 5%;
     }
-    .nav-links { 
-        display: none; 
+
+    .nav-links {
+        display: none;
         position: fixed;
         top: 0; right: -100%;
-        height: 100vh; width: 80%;
-        background: rgba(10, 10, 10, 0.98);
+        height: 100vh; width: 75%;
+        max-width: 320px;
+        background: rgba(8, 8, 8, 0.98);
         backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: 0.5s ease;
+        gap: 30px;
+        transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
         z-index: 4999;
+        border-left: 1px solid var(--border);
     }
+
     .nav-links.active { right: 0; display: flex; }
-    
+    .nav-links a { font-size: 1.2rem; }
     .hamburger { display: block !important; }
-    
+
+    .split-layout { grid-template-columns: 1fr; gap: 40px; }
     .main-title { font-size: 3.5rem; text-align: center; }
-    .hero-cta { flex-direction: column; width: 100%; }
+    .description { text-align: center; }
+    .hero-cta { flex-direction: column; align-items: center; width: 100%; }
     .btn { width: 100%; text-align: center; }
     .photo-frame { max-width: 400px; margin: 40px auto 0; }
-    .split-layout { grid-template-columns: 1fr; gap: 40px; }
-    
     .section-title { font-size: 2.5rem; }
+
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .carousel-3d-wrapper { height: 520px; }
+    .carousel-3d { width: 340px; height: 520px; }
+
+    .input-row { grid-template-columns: 1fr; }
 }
 
+/* ========================
+   RESPONSIVE - MOBILE (≤600px)
+======================== */
 @media (max-width: 600px) {
-    .scene { padding: 60px 5%; }
-    .main-title { font-size: 2.8rem; }
-    .glass-card { min-width: 100%; padding: 30px; }
-    .timeline-item { min-width: 100%; }
-    .carousel-3d { width: 300px; }
-    .project-card-3d { padding: 30px; }
-    .modal-content { padding: 20px; }
+    .scene { padding: 80px 6% 60px; }
+    .main-title { font-size: 2.5rem; line-height: 1.1; }
+    .description { font-size: 1rem; }
+    .section-title { font-size: 1.8rem; }
+
+    /* Hero */
+    .photo-frame { max-width: 280px; margin: 30px auto 0; }
+    .hero-cta { gap: 12px; }
+    .btn { padding: 14px 20px; font-size: 0.75rem; }
+
+    /* Timeline / experience cards */
+    .timeline-wrapper { padding-bottom: 10px; }
+    .glass-card { min-width: 100% !important; padding: 25px; }
+    .timeline-item { min-width: 100% !important; min-height: 220px; }
+    .card-inner { min-height: 220px; }
+
+    /* Skills */
+    .skills-grid { grid-template-columns: 1fr; gap: 16px; }
+
+    /* 3D Carousel */
+    .carousel-3d-wrapper { height: 480px; }
+    .carousel-3d { width: 280px; height: 480px; }
+    .project-card-3d { padding: 24px; }
+    .project-card-3d h3 { font-size: 1.3rem; }
+    .project-card-3d p { font-size: 0.95rem; }
+    .carousel-nav { bottom: -60px; gap: 14px; }
+    .carousel-nav button { width: 48px; height: 48px; font-size: 1.2rem; }
+
+    /* Contact form */
+    .input-row { grid-template-columns: 1fr; }
+    .contact-container { padding: 0; }
+
+    /* Modals */
+    .modal { padding: 20px 10px; }
+    .modal-content { padding: 20px !important; max-width: 100% !important; }
+    .close-resume { top: 8px !important; right: 12px !important; }
+
+    /* Resume modal */
+    #resume-modal .modal-content {
+        padding: 20px !important;
+        font-size: 0.75rem;
+    }
+    #resume-modal h1 { font-size: 1.4rem !important; }
+}
+
+/* ========================
+   RESPONSIVE - SMALL PHONE (≤400px)
+======================== */
+@media (max-width: 400px) {
+    .main-title { font-size: 2rem; }
+    .section-title { font-size: 1.5rem; }
+    .carousel-3d { width: 240px; }
+    .nav-links { width: 90%; max-width: 100%; }
 }
 
 /* MODAL STYLES */
