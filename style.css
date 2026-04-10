@@ -783,7 +783,8 @@ body.light-mode .hamburger span { background: #000; }
     .btn { padding: 14px 20px; font-size: 0.75rem; }
 
     /* Timeline / experience cards */
-    .timeline-wrapper { padding-bottom: 10px; }
+    .timeline-wrapper { padding-bottom: 10px; overflow-x: hidden; }
+    .timeline-track { flex-direction: column; gap: 20px; }
     .glass-card { min-width: 100% !important; padding: 25px; }
     .timeline-item { min-width: 100% !important; min-height: 220px; }
     .card-inner { min-height: 220px; }
