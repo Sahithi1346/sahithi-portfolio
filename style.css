@@ -50,12 +50,18 @@ body.light-mode .info-item .label { color: #555; }
 body.light-mode .modal p { color: var(--text-muted); }
 
 body.light-mode .main-title .highlight {
+    color: #111111;
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+}
+
+body.light-mode .main-title .highlight:hover {
     background: radial-gradient(
-        circle 180px at var(--mouse-x) var(--mouse-y), 
-        #111111 0%, 
-        #607c0b 30%, 
-        rgba(96, 124, 11, 0.3) 60%,
-        #cccccc 100%
+        circle 120px at var(--mouse-x) var(--mouse-y), 
+        #607c0b 0%, 
+        rgba(96, 124, 11, 0.4) 40%,
+        #111111 80%
     );
     color: transparent;
     -webkit-background-clip: text;
@@ -325,19 +331,21 @@ body.light-mode .hamburger span { background: #000; }
 }
 
 .main-title .highlight { 
-    --mouse-x: 50%;
-    --mouse-y: 50%;
+    color: #ffffff;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+.main-title .highlight:hover {
     background: radial-gradient(
-        circle 180px at var(--mouse-x) var(--mouse-y), 
-        #ffffff 0%, 
-        var(--accent) 30%, 
-        rgba(196, 241, 53, 0.3) 60%,
-        #222222 100%
+        circle 120px at var(--mouse-x) var(--mouse-y), 
+        var(--accent) 0%, 
+        rgba(196, 241, 53, 0.4) 40%,
+        #ffffff 80%
     );
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
-    display: inline-block;
 }
 
 
