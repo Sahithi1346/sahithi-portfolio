@@ -164,22 +164,28 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadResumeBtn.innerText = 'Creating PDF...';
         downloadResumeBtn.disabled = true;
 
-        // Directly use the modal content
-        const element = document.querySelector('#resume-modal .modal-content');
-        if (!element) {
+        // Clone the modal content to avoid affecting the live UI
+        const resumeModalContent = document.querySelector('#resume-modal .modal-content');
+        if (!resumeModalContent) {
             alert('Error: Resume content not found.');
             downloadResumeBtn.innerText = originalText;
             downloadResumeBtn.disabled = false;
             return;
         }
 
-        // Configuration for a clean, professional PDF
+        const element = resumeModalContent.cloneNode(true);
+        
+        // STRICTION: Remove UI elements from the PDF version
+        const uiElements = element.querySelectorAll('.close-resume, .no-print, button');
+        uiElements.forEach(el => el.remove());
+
+        // Configuration for a clean 2-page PDF
         const opt = {
             margin:       [0.5, 0.5, 0.5, 0.5],
             filename:     'Sahithi_Thavishi_Resume.pdf',
             image:        { type: 'jpeg', quality: 1 },
             html2canvas:  { 
-                scale: 1.5, // Reduced scale for better performance and stability
+                scale: 1.5, 
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff'
@@ -188,21 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
             pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // Generate the PDF
-        html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-            // Optional: You could do further PDF processing here
-        }).save().then(() => {
+        // Generate the PDF from the cleaned clone
+        html2pdf().set(opt).from(element).save().then(() => {
             downloadResumeBtn.innerText = originalText;
             downloadResumeBtn.disabled = false;
         }).catch(err => {
             console.error('PDF Generation Failed:', err);
-            downloadResumeBtn.innerText = 'Retrying...';
-            // Fallback: Simple print if generation fails
-            setTimeout(() => {
-                window.print();
-                downloadResumeBtn.innerText = originalText;
-                downloadResumeBtn.disabled = false;
-            }, 500);
+            downloadResumeBtn.innerText = 'Error! Try again';
+            downloadResumeBtn.disabled = false;
         });
     });
 
