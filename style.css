@@ -57,15 +57,19 @@ body.light-mode .main-title .highlight {
 }
 
 body.light-mode .main-title .highlight:hover {
-    background: radial-gradient(
-        circle 120px at var(--mouse-x) var(--mouse-y), 
+    background: linear-gradient(
+        90deg, 
         #607c0b 0%, 
-        rgba(96, 124, 11, 0.4) 40%,
-        #111111 80%
+        #111111 25%, 
+        #3399ff 50%, 
+        #111111 75%, 
+        #607c0b 100%
     );
+    background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
+    animation: colourFlow 2s linear infinite;
 }
 body.light-mode .project-card-3d h3 { color: #111; }
 body.light-mode .project-card-3d p { color: #555; }
@@ -337,15 +341,23 @@ body.light-mode .hamburger span { background: #000; }
 }
 
 .main-title .highlight:hover {
-    background: radial-gradient(
-        circle 120px at var(--mouse-x) var(--mouse-y), 
+    background: linear-gradient(
+        90deg, 
         var(--accent) 0%, 
-        rgba(196, 241, 53, 0.4) 40%,
-        #ffffff 80%
+        #78ffd6 25%, 
+        #a8ff78 50%, 
+        #78ffd6 75%, 
+        var(--accent) 100%
     );
+    background-size: 200% auto;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
+    animation: colourFlow 2s linear infinite;
+}
+
+@keyframes colourFlow {
+    to { background-position: 200% center; }
 }
 
 
