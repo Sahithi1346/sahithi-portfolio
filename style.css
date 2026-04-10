@@ -48,6 +48,20 @@ body.light-mode .modal .glass-card { background: #ffffff; box-shadow: 0 10px 30p
 body.light-mode .close-modal { color: var(--text-muted); }
 body.light-mode .info-item .label { color: #555; }
 body.light-mode .modal p { color: var(--text-muted); }
+
+body.light-mode .main-title .highlight {
+    background: linear-gradient(
+        to right, 
+        #111111 20%, 
+        #607c0b 40%, 
+        #607c0b 60%, 
+        #111111 80%
+    );
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
 body.light-mode .project-card-3d h3 { color: #111; }
 body.light-mode .project-card-3d p { color: #555; }
 body.light-mode .project-card-3d { border-color: rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
@@ -308,9 +322,28 @@ body.light-mode .hamburger span { background: #000; }
     line-height: 0.95;
     text-transform: uppercase;
     margin-bottom: 25px;
+    letter-spacing: -2px;
 }
 
-.main-title .highlight { color: var(--accent); }
+.main-title .highlight { 
+    background: linear-gradient(
+        to right, 
+        var(--accent) 20%, 
+        #ffffff 40%, 
+        #ffffff 60%, 
+        var(--accent) 80%
+    );
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: premiumShine 4s linear infinite;
+    display: inline-block;
+}
+
+@keyframes premiumShine {
+    to { background-position: 200% center; }
+}
 
 .description {
     font-size: 1.3rem;
