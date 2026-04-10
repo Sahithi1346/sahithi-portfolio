@@ -136,8 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     });
 
-    });
-
     // MOBILE HAMBURGER LOGIC
     const hamburger = document.getElementById('hamburger');
     const navLinksContainer = document.querySelector('.nav-links');
