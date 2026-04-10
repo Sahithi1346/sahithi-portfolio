@@ -582,18 +582,59 @@ body::after {
     gap: 30px;
 }
 
-.input-group { border-bottom: 2px solid var(--border); transition: var(--transition); }
-.input-group:focus-within { border-color: var(--accent); }
+.input-group {
+    position: relative;
+    border-bottom: 2px solid var(--border);
+    transition: var(--transition);
+}
+
+.input-group:focus-within {
+    border-color: var(--accent);
+}
 
 .input-group input, .input-group textarea {
     width: 100%;
     background: transparent;
     border: none;
-    padding: 20px 0;
+    padding: 25px 0 10px 0;
     color: #fff;
     font-family: var(--font-body);
     font-size: 1.1rem;
     outline: none;
+}
+
+.input-group label {
+    position: absolute;
+    left: 0;
+    top: 25px;
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group textarea:focus + label,
+.input-group textarea:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 800;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 600px) {
+    .input-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 1000px) {
